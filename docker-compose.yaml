@@ -1,0 +1,59 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URL=mongodb://root:example@mongo:27017/mydb?authSource=admin
+    volumes:
+      - ./api:/app
+      - ./shared:/app/shared
+
+  worker:
+    build:
+      context: .
+      dockerfile: worker/Dockerfile
+    depends_on:
+      - mongo
+      - redis
+    environment:
+      - SINK_URL=http://sink:4000
+      - MONGO_URL=mongodb://root:example@mongo:27017/mydb?authSource=admin
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - ./worker:/app
+      - ./shared:/app/shared
+
+  sink:
+    build:
+      context: .
+      dockerfile: sink/Dockerfile
+    ports:
+      - "4000:4000"
+    depends_on:
+      - redis
+    environment:
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - ./sink:/app
+      - ./shared:/app/shared
+
+  mongo:
+    image: mongo:4.2.0
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=example
+    volumes:
+      - mongo-data:/data/db
+
+  redis:
+    image: redis:6.0.9
+    restart: always
+
+volumes:
+  mongo-data:

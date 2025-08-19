@@ -17,4 +17,4 @@ EXPOSE 3000
 
 # Run with nodemon or npm script
 RUN npm install -g nodemon
-CMD ["nodemon", "index.js"]
+CMD ["npm", "run", "dev"]

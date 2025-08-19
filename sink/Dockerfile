@@ -12,4 +12,4 @@ ENV API_PORT=4000
 EXPOSE 4000
 
 RUN npm install -g nodemon
-CMD ["nodemon", "index.js"]
+CMD ["npm", "run", "dev"]

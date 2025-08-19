@@ -52,7 +52,7 @@ services:
       - mongo-data:/data/db
 
   redis:
-    image: redis:6.0.9
+    image: redis
     restart: always
 
 volumes:

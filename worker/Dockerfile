@@ -10,4 +10,4 @@ COPY worker/ .
 COPY shared/ ./shared
 
 RUN npm install -g nodemon
-CMD ["nodemon", "index.js"]
+CMD ["npm", "run", "dev"]
